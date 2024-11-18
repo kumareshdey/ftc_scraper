@@ -58,12 +58,29 @@ def per_page_operation(log, soup: BeautifulSoup, save_path):
 @retry(tries=2, delay=2, logger=log)
 def first_page(log, query, save_path, driver: webdriver.Chrome) -> None:
     url = base_url.format(query=quote(query), page=1)
+    log.info(f"Fetching URL: {url}")
     driver.get(url)
     soup = BeautifulSoup(driver.page_source, "html.parser")
+    
+    # Find pagination items
     pagination_items = soup.find_all("li", class_="usa-pagination__item usa-pagination__page-no")
-    page_numbers = [int(item.text) for item in pagination_items if item.text.isdigit()]
-    max_page = max(page_numbers)
+    log.debug(f"Pagination items found: {pagination_items}")
+    
+    # Extract numeric page numbers
+    try:
+        page_numbers = [int(item.text) for item in pagination_items if item.text.isdigit()]
+        if not page_numbers:
+            log.warning("No page numbers found. Defaulting to 1.")
+            max_page = 0  # Default if no pagination is found
+        else:
+            max_page = max(page_numbers)
+    except Exception as e:
+        log.error(f"Error parsing page numbers: {e}")
+        raise ValueError("Failed to extract page numbers.") from e
+
     log.info(f"Total pages found: {max_page}")
+    
+    # Perform per-page operation
     per_page_operation(log, soup, save_path)
     return max_page
 

@@ -5,7 +5,7 @@ import logging
 import traceback
 import os
 import queue
-from service import get_driver, first_page, base_url, quote, BeautifulSoup, per_page_operation
+from ftc_scraper.service import get_driver, first_page, base_url, quote, BeautifulSoup, per_page_operation
 
 name = 'FTC Scraper'
 
