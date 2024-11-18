@@ -4,7 +4,7 @@ from contextlib import contextmanager
 import time
 import traceback
 import warnings
-from credential import SCRAPEOPS
+# from credential import SCRAPEOPS
 import requests
 from selenium import webdriver
 from contextlib import contextmanager
@@ -91,30 +91,30 @@ def get_driver():
 #         return wrapper
 #     return decorator
 
-@retry(tries=2, delay=2, logger=log)
-def proxied_request(url, render_js=False, without_proxy=False):
-    if without_proxy:
-        response = requests.get(url)
-        if response.status_code in [200, 201]:
-            return response
-        else:
-            raise Exception(f'Proxied request failed. {response.status_code}. {response.text}')
+# @retry(tries=2, delay=2, logger=log)
+# def proxied_request(url, render_js=False, without_proxy=False):
+#     if without_proxy:
+#         response = requests.get(url)
+#         if response.status_code in [200, 201]:
+#             return response
+#         else:
+#             raise Exception(f'Proxied request failed. {response.status_code}. {response.text}')
         
-    PROXY_URL = 'https://proxy.scrapeops.io/v1/'
-    response = requests.get(
-        url=PROXY_URL,
-        params={
-            'api_key': SCRAPEOPS,
-            'url': url, 
-            # 'residential': 'true', 
-            'country': 'us',
-            'render_js': render_js
-        },
-    )
-    if response.status_code in [200, 201]:
-        return response
-    else:
-        raise Exception(f'Proxied request failed. {response.status_code}. {response.text}')
+#     PROXY_URL = 'https://proxy.scrapeops.io/v1/'
+#     response = requests.get(
+#         url=PROXY_URL,
+#         params={
+#             'api_key': SCRAPEOPS,
+#             'url': url, 
+#             # 'residential': 'true', 
+#             'country': 'us',
+#             'render_js': render_js
+#         },
+#     )
+#     if response.status_code in [200, 201]:
+#         return response
+#     else:
+#         raise Exception(f'Proxied request failed. {response.status_code}. {response.text}')
 
 class DummyRequest:
     def __init__(self, text="", status_code=200):

@@ -44,12 +44,14 @@ def per_page_operation(log, soup: BeautifulSoup, save_path):
         "data-testid": "gridContainer",
         "class": "grid-container result search-result-item"
     })
-
-    for search_result_item in search_result_items:
-        text = search_result_item.find('h2', class_='result-title-label')
-        if ("|" or "In the Matter of") in text.text:
-            url = text.find('a')['href']
-            final_page(log, url, save_path)
+    try:
+        for search_result_item in search_result_items:
+            text = search_result_item.find('h2', class_='result-title-label')
+            if ("|" or "In the Matter of") in text.text:
+                url = text.find('a')['href']
+                final_page(log, url, save_path)
+    except:
+        pass
     return
 
 
