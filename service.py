@@ -9,6 +9,8 @@ from retry import retry
 base_url = "https://search.ftc.gov/search?utf8=%E2%9C%93&affiliate=ftc_prod&query={query}&commit=Search&page={page}"
 
 def download_pdf(log, url, save_path):
+    if not url.endswith(".pdf"):
+        return
     response = requests.get(url)
     path = "/".join([save_path, url.split("/")[-1]])
     if response.status_code == 200:
@@ -21,15 +23,33 @@ def download_pdf(log, url, save_path):
 
 def final_page(log, url, save_path):
     includes  = [
-        "Administrative Complaint",
-        "Administrative Complaint [Redacted Public Version]",
-        "Final Order",
-        "Decision and Order",
-        "Decision of Chief Administrative Law Judge",
-        "Regarding Potential Criminal Violations of",
-        'Order', 
-        'Complaint'
-    ]
+    "Order",
+    "Complaint",
+    "Administrative Complaint",
+    "Administrative Complaint [Redacted Public Version]",
+    "Final Order",
+    "Decision and Order",
+    "Decision of Chief Administrative Law Judge",
+    "Regarding Potential Criminal Violations of",
+    "Provisionally Redacted Public Version",
+    "Stipulated Order for Civil Penalty, Monetary Judgment and Injunctive Relief",
+    "Stipulated Order for Permanent Injunction and Monetary Judgment",
+    "Complaint for Civil Penalties, Injunction, and Other Relief",
+    "Complaint for Permanent Injunction, Monetary Relief, Civil Penalties, and Other Relief",
+    "Complaint for Permanent Injunction, Other Equitable Relief, and Civil Penalties",
+    "Complaint for Permanent Injunction and Other Equitable Relief",
+    "Complaint for Permanent Injunction and Other Equitable Relief [Seal Lifted]",
+    "Complaint for Permanent Injunction and Civil Penalties",
+    "[Redacted] Complaint for Permanent Injunction and Other Equitable Relief",
+    "Order for Permanent Injunction and Civil Penalty Judgment [Entered by the Court]",
+    "Commission Final Order",
+    "Consent Decree",
+    "Administrative Part 1 Complaint",
+    "Administrative Part 2 Complaint",
+    "Administrative Part 3 Complaint",
+    "Administrative Part 4 Complaint"
+]
+
     with get_driver() as driver:
         driver.get(url)
         urls = []
